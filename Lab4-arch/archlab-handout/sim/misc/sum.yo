@@ -1,0 +1,37 @@
+                            | # sum_list.ys by name1e5s
+                            | # Execution begins at address 0
+                            | 
+0x000:                      |         .pos 0
+0x000: 30f40001000000000000 |         irmovq stack,%rsp   #set up the stack pointer
+0x00a: 804800000000000000   |         call main           #goto the main
+0x013: 00                   |         halt               #finish level
+                            | 
+                            | # Sample linked list
+0x018:                      |         .align 8
+0x018:                      |         ele1:
+0x018: 0a00000000000000     |         .quad 0x00a
+0x020: 2800000000000000     |         .quad ele2
+0x028:                      |         ele2:
+0x028: b000000000000000     |         .quad 0x0b0
+0x030: 3800000000000000     |         .quad ele3
+0x038:                      |         ele3:
+0x038: 000c000000000000     |         .quad 0xc00
+0x040: 0000000000000000     |         .quad 0
+                            | 
+0x048: 30f71800000000000000 | main:	irmovq ele1,%rdi   # take into the link node  //sum_list()
+0x052: 805c00000000000000   |         call sum_list
+0x05b: 90                   | 	    ret
+                            | 
+0x05c:                      | sum_list:
+0x05c: 30f00000000000000000 | 	    irmovq $0,%rax    #the start value is 0
+0x066: 708700000000000000   | 	    jmp test            #jump the test  
+0x06f: 50670000000000000000 | loop:	mrmovq 0(%rdi),%rsi     #take the value of the address int %rdi+0  to the %rax
+0x079: 6060                 |         addq %rsi,%rax          #make sum
+0x07b: 50670800000000000000 |         mrmovq 8(%rdi),%rsi     #take the next node
+0x085: 2067                 |         rrmovq %rsi,%rdi       #take the value
+0x087: 6277                 | test:   andq %rdi,%rdi        #adjust the ls==0
+0x089: 746f00000000000000   |         jne loop
+0x092: 90                   |         ret
+                            | 
+0x100:                      |         .pos 0x100
+0x100:                      | stack:

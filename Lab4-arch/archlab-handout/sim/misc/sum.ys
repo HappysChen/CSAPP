@@ -1,0 +1,37 @@
+# sum_list.ys by name1e5s
+# Execution begins at address 0
+
+        .pos 0
+        irmovq stack,%rsp   #set up the stack pointer
+        call main           #goto the main
+        halt               #finish level
+
+# Sample linked list
+        .align 8
+        ele1:
+        .quad 0x00a
+        .quad ele2
+        ele2:
+        .quad 0x0b0
+        .quad ele3
+        ele3:
+        .quad 0xc00
+        .quad 0
+
+main:	irmovq ele1,%rdi   # take into the link node  //sum_list()
+        call sum_list
+	    ret
+
+sum_list:
+	    irmovq $0,%rax    #the start value is 0
+	    jmp test            #jump the test  
+loop:	mrmovq 0(%rdi),%rsi     #take the value of the address int %rdi+0  to the %rax
+        addq %rsi,%rax          #make sum
+        mrmovq 8(%rdi),%rsi     #take the next node
+        rrmovq %rsi,%rdi       #take the value
+test:   andq %rdi,%rdi        #adjust the ls==0
+        jne loop
+        ret
+
+        .pos 0x100
+stack:
